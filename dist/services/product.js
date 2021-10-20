@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveProduct = exports.getAllProducts = void 0;
+exports.searchProductByProductName = exports.saveProduct = exports.getAllProducts = void 0;
 const product_1 = __importDefault(require("../models/product"));
 const getAllProducts = () => __awaiter(void 0, void 0, void 0, function* () {
     let query = {
@@ -31,4 +31,12 @@ const saveProduct = (payload) => __awaiter(void 0, void 0, void 0, function* () 
     };
 });
 exports.saveProduct = saveProduct;
+const searchProductByProductName = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    let result = yield product_1.default.find({ "productName": { "$regex": `.*${payload}.*` } });
+    return {
+        isCorrect: true,
+        data: result
+    };
+});
+exports.searchProductByProductName = searchProductByProductName;
 //# sourceMappingURL=product.js.map

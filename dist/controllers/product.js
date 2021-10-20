@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveProductPost = exports.loadProducts = void 0;
+exports.searchProductByName = exports.saveProductPost = exports.loadProducts = void 0;
 const product_1 = __importDefault(require("../models/product"));
 const product_2 = require("../services/product");
 const loadProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -37,4 +37,14 @@ const saveProductPost = (req, res) => __awaiter(void 0, void 0, void 0, function
     });
 });
 exports.saveProductPost = saveProductPost;
+const searchProductByName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { search } = req.params;
+    let { isCorrect, data } = yield (0, product_2.searchProductByProductName)(search);
+    res.json({
+        isCorrect: isCorrect,
+        message: "Registro exitoso",
+        data: data,
+    });
+});
+exports.searchProductByName = searchProductByName;
 //# sourceMappingURL=product.js.map

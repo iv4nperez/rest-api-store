@@ -22,3 +22,13 @@ export const saveProduct = async ( payload: IProduct ) => {
        data: product
    };
 }
+
+export const  searchProductByProductName = async ( payload: String ) => {
+
+    let result = await Product.find({ "productName": { "$regex": `.*${ payload }.*`} })
+
+    return {
+        isCorrect: true,
+        data: result
+    };
+}
