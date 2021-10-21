@@ -1,4 +1,3 @@
-
 import Product, { IProduct } from "../models/product";
 
 export const getAllProducts = async () => {
@@ -23,12 +22,18 @@ export const saveProduct = async ( payload: IProduct ) => {
    };
 }
 
-export const  searchProductByProductName = async ( payload: String ) => {
+export const  searchProductByProductName = async ( payload?: String ) : Promise<{ products: Array<any>, count: number }> => {
 
-    let result = await Product.find({ "productName": { "$regex": `.*${ payload }.*`} })
+    let query: any = { 
+        status: true,
+        productName : { "$regex": `.*${ payload }.*` } 
+    };
+
+    const count    = await Product.countDocuments( query );
+    const products = await Product.find(query).exec();
 
     return {
-        isCorrect: true,
-        data: result
+        count,
+        products
     };
 }

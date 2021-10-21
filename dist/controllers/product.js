@@ -39,11 +39,12 @@ const saveProductPost = (req, res) => __awaiter(void 0, void 0, void 0, function
 exports.saveProductPost = saveProductPost;
 const searchProductByName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { search } = req.params;
-    let { isCorrect, data } = yield (0, product_2.searchProductByProductName)(search);
+    console.log(search);
+    let { products, count } = yield (0, product_2.searchProductByProductName)(search);
     res.json({
-        isCorrect: isCorrect,
-        message: "Registro exitoso",
-        data: data,
+        isCorrect: true,
+        count: count,
+        data: products,
     });
 });
 exports.searchProductByName = searchProductByName;

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Product from "../models/product";
+import Product, { IProduct } from "../models/product";
 import { getAllProducts, saveProduct, searchProductByProductName } from "../services/product";
 
 export const loadProducts = async ( req: Request , res: Response ) => {
@@ -35,13 +35,12 @@ export const saveProductPost = async ( req: Request , res: Response ) => {
 export const searchProductByName = async (  req: Request , res: Response ) => {
 
     const { search } = req.params;
-
-    let {  isCorrect, data }  = await searchProductByProductName( search );
-
+    console.log( search )
+    let { products, count } = await searchProductByProductName( search );
 
     res.json({
-        isCorrect: isCorrect,
-        message: "Registro exitoso",
-        data: data ,
+        isCorrect: true,
+        count: count,
+        data: products ,
     })
 }

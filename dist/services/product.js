@@ -32,10 +32,15 @@ const saveProduct = (payload) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.saveProduct = saveProduct;
 const searchProductByProductName = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    let result = yield product_1.default.find({ "productName": { "$regex": `.*${payload}.*` } });
+    let query = {
+        status: true,
+        productName: { "$regex": `.*${payload}.*` }
+    };
+    const count = yield product_1.default.countDocuments(query);
+    const products = yield product_1.default.find(query).exec();
     return {
-        isCorrect: true,
-        data: result
+        count,
+        products
     };
 });
 exports.searchProductByProductName = searchProductByProductName;
