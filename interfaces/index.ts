@@ -1,0 +1,5 @@
+
+export { IProduct } from './IProduct';
+
+
+

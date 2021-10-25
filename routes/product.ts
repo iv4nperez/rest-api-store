@@ -1,10 +1,9 @@
 import { Router } from "express";
-import { loadProducts, saveProductPost, searchProductByName } from "../controllers/product";
+import { saveProductPost, searchProductByName } from "../controllers/product";
 
 const router = Router();
 
-router.get('/', loadProducts );
-router.get('/:search', searchProductByName)
+router.get('/', searchProductByName );
 router.post('/', saveProductPost );
 
 

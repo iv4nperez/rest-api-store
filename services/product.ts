@@ -1,18 +1,19 @@
-import Product, { IProduct } from "../models/product";
+import Product from "../models/product";
+import { IProduct } from '../interfaces'
+import { Response } from "../helpers/Response";
 
-export const getAllProducts = async () => {
+// export const getAllProducts = async () => {
 
-    let query = {
-        status: true
-    }
+//     let query = {
+//         status: true
+//     }
 
-   let result = await Product.find( query );
+//    let result = await Product.find( query );
 
-   return result;
-}
+//    return result;
+// }
 
 export const saveProduct = async ( payload: IProduct ) => {
-
     const product = new Product( payload );
     product.save();
 
@@ -22,18 +23,23 @@ export const saveProduct = async ( payload: IProduct ) => {
    };
 }
 
-export const  searchProductByProductName = async ( payload?: String ) : Promise<{ products: Array<any>, count: number }> => {
+export const  searchProductByProductName = async ( payload: String ) : Promise<Response> => {
 
     let query: any = { 
         status: true,
-        productName : { "$regex": `.*${ payload }.*` } 
+        productName : { "$regex": payload, $options:'i' } 
     };
 
-    const count    = await Product.countDocuments( query );
-    const products = await Product.find(query).exec();
+    try {
+        
+        const count    = await Product.countDocuments( query );
+        const products = await Product.find( query ).exec();
 
-    return {
-        count,
-        products
-    };
+        return new Response(products, count, true);
+
+    } catch (error) {
+
+        return new Response([], 0, false);        
+    }
+
 }

@@ -1,23 +1,25 @@
 import { Request, Response } from "express";
-import Product, { IProduct } from "../models/product";
-import { getAllProducts, saveProduct, searchProductByProductName } from "../services/product";
+import Product from "../models/product";
+import { saveProduct, searchProductByProductName } from "../services/product";
 
-export const loadProducts = async ( req: Request , res: Response ) => {
 
-    // get params
-    let result = await getAllProducts();
-    
-    res.json({
-        isCorrect: true,
-        message: "Registro obtenido correctamente",
-        data: result ,
-    })
+// export const loadProducts = async ( req: Request , res: Response ) => {
 
-}
+//     console.log(req.query)
+//     // get params
+//     let result = await getAllProducts();
+
+//     res.json({
+//         isCorrect: true,
+//         message: "Registro obtenido correctamente",
+//         data: result ,
+//     })
+
+// }
 
 export const saveProductPost = async ( req: Request , res: Response ) => {
 
-    console.log(req.body)
+
     // get params
     const product = new Product( req.body )
     
@@ -32,15 +34,16 @@ export const saveProductPost = async ( req: Request , res: Response ) => {
 }
 
 
-export const searchProductByName = async (  req: Request , res: Response ) => {
+export const searchProductByName = async (  req: Request , res: Response ): Promise<void> => {
 
-    const { search } = req.params;
-    console.log( search )
-    let { products, count } = await searchProductByProductName( search );
+    const { q = '' } = req.query;
+    let query: string = q.toString();
 
-    res.json({
-        isCorrect: true,
-        count: count,
-        data: products ,
-    })
+    let result = await searchProductByProductName( query );
+
+    if ( !result.isCorrect ) {
+        res.status(400);
+    }
+    
+    res.json(result);
 }
