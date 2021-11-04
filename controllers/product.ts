@@ -40,6 +40,7 @@ export const getProductByCategory = async ( req: Request, res: Response ): Promi
         res.status(400);
     }
     
+    
     res.json(result);
 
 }
