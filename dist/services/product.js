@@ -12,23 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchProductByProductName = exports.saveProduct = void 0;
+exports.getProductByCategoryTypeName = exports.searchProductByProductName = exports.saveProduct = void 0;
 const product_1 = __importDefault(require("../models/product"));
 const Response_1 = require("../helpers/Response");
-// export const getAllProducts = async () => {
-//     let query = {
-//         status: true
-//     }
-//    let result = await Product.find( query );
-//    return result;
-// }
 const saveProduct = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const product = new product_1.default(payload);
-    product.save();
-    return {
-        isCorrect: true,
-        data: product
-    };
+    try {
+        const product = new product_1.default(payload);
+        yield product.save();
+        return new Response_1.Response(product, 0, true);
+    }
+    catch (error) {
+        return new Response_1.Response({}, 0, false);
+    }
 });
 exports.saveProduct = saveProduct;
 const searchProductByProductName = (payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -46,4 +41,19 @@ const searchProductByProductName = (payload) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.searchProductByProductName = searchProductByProductName;
+const getProductByCategoryTypeName = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let query = {
+            status: true,
+            category: payload
+        };
+        const count = yield product_1.default.countDocuments(query);
+        const products = yield product_1.default.find(query).exec();
+        return new Response_1.Response(products, count, true);
+    }
+    catch (error) {
+        return new Response_1.Response([], 0, false);
+    }
+});
+exports.getProductByCategoryTypeName = getProductByCategoryTypeName;
 //# sourceMappingURL=product.js.map

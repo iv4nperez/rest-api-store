@@ -8,10 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const mongoose = require('mongoose');
-const dbConnection = () => __awaiter(void 0, void 0, void 0, function* () {
+const mongooseOptions = require('mongoose');
+const connection = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose.connect(process.env.MONGO_CNN, {
+        yield mongooseOptions.connect(process.env.MONGO_CNN, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
@@ -25,6 +25,6 @@ const dbConnection = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 module.exports = {
-    dbConnection
+    connection
 };
 //# sourceMappingURL=config.js.map

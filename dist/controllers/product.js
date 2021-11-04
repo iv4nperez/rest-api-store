@@ -12,28 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchProductByName = exports.saveProductPost = void 0;
+exports.getProductByCategory = exports.searchProductByName = exports.saveProductPost = void 0;
 const product_1 = __importDefault(require("../models/product"));
 const product_2 = require("../services/product");
-// export const loadProducts = async ( req: Request , res: Response ) => {
-//     console.log(req.query)
-//     // get params
-//     let result = await getAllProducts();
-//     res.json({
-//         isCorrect: true,
-//         message: "Registro obtenido correctamente",
-//         data: result ,
-//     })
-// }
 const saveProductPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // get params
     const product = new product_1.default(req.body);
-    let { isCorrect, data } = yield (0, product_2.saveProduct)(product);
-    res.json({
-        isCorrect: isCorrect,
-        message: "Registro exitoso",
-        data: data,
-    });
+    let result = yield (0, product_2.saveProduct)(product);
+    if (!result.isCorrect) {
+        res.status(400);
+    }
+    res.json(result);
 });
 exports.saveProductPost = saveProductPost;
 const searchProductByName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -46,4 +35,14 @@ const searchProductByName = (req, res) => __awaiter(void 0, void 0, void 0, func
     res.json(result);
 });
 exports.searchProductByName = searchProductByName;
+const getProductByCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { category = '' } = req.query;
+    let query = category.toString();
+    let result = yield (0, product_2.getProductByCategoryTypeName)(query);
+    if (!result.isCorrect) {
+        res.status(400);
+    }
+    res.json(result);
+});
+exports.getProductByCategory = getProductByCategory;
 //# sourceMappingURL=product.js.map

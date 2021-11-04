@@ -55,7 +55,22 @@ const ProductSchema = new mongoose_1.Schema({
     status: {
         type: Boolean,
         default: true
+    },
+    category: {
+        type: String,
+        required: true,
+        // emun: [
+        //     'VINOS_Y_LICORES',
+        //     'BELLEZA_Y_CUIDADO_PERSONAL',
+        //     'AGUA_JUGOS_Y_REFRESCOS',
+        //     'LIMPIEZA_DEL_HOGAR'
+        // ]
     }
+    // categoryId:{
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'Category',
+    //     required: true
+    // }
 });
 exports.default = mongoose_1.default.model('Product', ProductSchema);
 //# sourceMappingURL=product.js.map

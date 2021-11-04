@@ -2,25 +2,19 @@ import Product from "../models/product";
 import { IProduct } from '../interfaces'
 import { Response } from "../helpers/Response";
 
-// export const getAllProducts = async () => {
 
-//     let query = {
-//         status: true
-//     }
+export const saveProduct = async ( payload: IProduct ) : Promise<Response> => {
+    
+    try {
+        
 
-//    let result = await Product.find( query );
+        const product = new Product( payload );
+        await product.save();
 
-//    return result;
-// }
-
-export const saveProduct = async ( payload: IProduct ) => {
-    const product = new Product( payload );
-    product.save();
-
-   return {
-       isCorrect: true,
-       data: product
-   };
+        return new Response(product, 0, true);
+    } catch (error) {
+        return new Response({}, 0, false);
+    }
 }
 
 export const  searchProductByProductName = async ( payload: String ) : Promise<Response> => {
@@ -42,4 +36,22 @@ export const  searchProductByProductName = async ( payload: String ) : Promise<R
         return new Response([], 0, false);        
     }
 
+}
+
+export const getProductByCategoryTypeName = async ( payload: string ) : Promise<Response> => {
+
+    try {
+        let query: any = {
+            status: true,
+            category: payload
+        }
+    
+        const count     = await Product.countDocuments( query );
+        const products  = await Product.find( query ).exec();
+        return new Response(products, count, true);
+    
+    } catch (error) {
+
+        return new Response([], 0, false);        
+    }
 }

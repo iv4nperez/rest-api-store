@@ -8,4 +8,5 @@ export interface IProduct {
     productName: string;
     productDescription: string;
     productPrice: number;
+    category: string;
 }

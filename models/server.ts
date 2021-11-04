@@ -1,34 +1,43 @@
 import express, { Application } from 'express'
 import cors from "cors";
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../../swagger.json');
 
-const { dbConnection } = require('../database/config');
+const { connection } = require('../database/config');
 
 import userRoutes from '../routes/usuario';
 import productRoutes from '../routes/product';
+import categoryRoutes from '../routes/category'
 
 class Server {
 
     private app: Application;
     private port: string;
+    private server: any;
+    private io: any;
     private apiPaths = {
         usuarios: '/api/usuarios',
-        products: '/api/products' 
+        products: '/api/products',
+        category: '/api/category'
     }
 
     constructor(){
-        this.app  = express();
-        this.port = process.env.PORT || '9000';
-
+        this.app    = express();
+        this.port   = process.env.PORT || '9000'; 
+        this.server = require('http').createServer( this.app );
+        this.io     = require('socket.io')( this.server );
         //connection db
         this.connectionDB();
         //middleware
         this.middlewares();
         // definir rutas
         this.routes();
+
+        this.swagger();
     }
 
     async connectionDB() {
-        await dbConnection();
+        await connection();
     }
 
     middlewares() {
@@ -38,16 +47,32 @@ class Server {
         this.app.use( express.json() );
         //Carpeta publica
         this.app.use( express.static('public') );
-
+        // Sockets
+        this.sockets();
     }
 
     routes(){
         this.app.use( this.apiPaths.usuarios, userRoutes ),
-        this.app.use( this.apiPaths.products, productRoutes )
+        this.app.use( this.apiPaths.products, productRoutes ),
+        this.app.use( this.apiPaths.category, categoryRoutes )
+    }
+    
+    sockets(){
+        this.io.on('connection', ( socket: any ) => {
+            console.log('cliente conectado')
+
+            socket.on('disconnect', () => {
+                console.log('cliente desconectado')
+            });
+        });
+    }
+
+    swagger(){
+        this.app.use( '/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument) )
     }
 
     listen() {
-        this.app.listen( this.port, () => {
+        this.server.listen( this.port, () => {
             console.log(`Servidor corriendo en puerto ${ this.port }` )
         })
     }
