@@ -46,8 +46,8 @@ export const getProductByCategoryTypeName = async ( payload: string ) : Promise<
             category: payload
         }
     
-        const count     = await Product.countDocuments( query );
-        const products  = await Product.find( query ).exec();
+        const count     = await Product.countDocuments( query ).limit( 3 );
+        const products  = await Product.find( query ).limit( 3 ).exec();
         return new Response(products, count, true);
     
     } catch (error) {

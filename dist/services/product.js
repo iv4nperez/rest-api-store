@@ -47,8 +47,8 @@ const getProductByCategoryTypeName = (payload) => __awaiter(void 0, void 0, void
             status: true,
             category: payload
         };
-        const count = yield product_1.default.countDocuments(query);
-        const products = yield product_1.default.find(query).exec();
+        const count = yield product_1.default.countDocuments(query).limit(3);
+        const products = yield product_1.default.find(query).limit(3).exec();
         return new Response_1.Response(products, count, true);
     }
     catch (error) {
